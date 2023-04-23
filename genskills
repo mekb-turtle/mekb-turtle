@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+SKILLS=java,nodejs,bash,c,lua
+curl -- "https://skillicons.dev/icons?theme=dark&i=$SKILLS" \
+	| sed 's/fill="#242938"/fill="#1e1e2e"/g' \
+	| sed 's/fill="#fff"/fill="#cdd6f4"/g' \
+	| sed 's/fill="#F58219"/fill="#fab387"/g' \
+	| sed 's/fill="#81CD39"/fill="#a6e3a1"/g' \
+	| sed 's/fill="#394AAB"/fill="#89b4fa"/g' \
+	| sed 's/fill="gray"/fill="#585b70"/g' \
+	> skills.svg
+#	| sed 's/fill="navy"/fill="#89b4fa"/g' \
+#	| sed 's/fill=""/fill=""/' \
