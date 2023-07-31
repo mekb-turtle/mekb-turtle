@@ -1,3 +1,14 @@
 #!/usr/bin/bash
-magick -gravity center -background transparent -fill "#f5c2e7" -size 128x64 -font Ubuntu caption:mekb -extent 352x96 \( turtle.png -flop -resize 84x84 -background transparent -gravity center \) -geometry -128-0 -composite \( turtle.png -resize 84x84 -background transparent -gravity center \) -geometry +128-0 -composite header.png
-magick -gravity center -background transparent -fill "#f5c2e7" -size 72x36 -font Ubuntu caption:"Skills:" skills_text.png
+magick \
+	-gravity center -background transparent -fill "#f5c2e7" -size 128x64 -font Ubuntu caption:mekb \
+	-extent 352x96 \
+	\( turtle.png -flop -resize 84x84 -background transparent -gravity center \) \
+	-geometry -128-0 -composite \
+	\( turtle.png -resize 84x84 -background transparent -gravity center \) \
+	-geometry +128-0 -composite \
+	\( +clone -fill "#1e1e2e" -colorize "100%" -blur 0x4 \( +clone -blur 0x4 \) -layers merge \) +swap -layers merge \
+	header.png
+magick \
+	-gravity center -background transparent -fill "#f5c2e7" -size 72x36 -font Ubuntu caption:"Skills:" \
+	\( +clone -fill "#1e1e2e" -colorize "100%" -blur 0x4 \( +clone -blur 0x4 \) -layers merge \) +swap -layers merge \
+	skills_text.png
