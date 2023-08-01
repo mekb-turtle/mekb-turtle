@@ -1,14 +1,63 @@
 #!/usr/bin/bash
+SHADOW=(
+	-gravity center -background transparent
+	"(" +clone
+		"(" +clone -morphology Edge disk:2 ")" -layers merge
+		-fill "#1e1e2e" -colorize "100%"
+		-blur 0x8
+	")"
+	+swap -layers merge
+)
+ROUNDED=(
+	"(" +clone
+		-alpha transparent
+		-fill white -draw "roundRectangle 0,0,%[fx:w],%[fx:h] 16,16"
+	")"
+	-compose CopyOpacity -composite
+)
+curl -- "https://img.shields.io/static/v1?label=Discord&message=mekb.&logo=discord&style=for-the-badge&logoColor=f5c2e7&labelColor=1e1e2e&color=f5c2e7" \
+	| inkscape -h 32 -p --export-filename - --export-type png \
+	| magick png:- \
+	"${ROUNDED[@]}" png:- \
+	| magick png:- \
+	-gravity center -background transparent \
+	-extent "%[fx:w+48]x%[fx:h+48]<" \
+	"${SHADOW[@]}" \
+	discord.png && \
 magick \
-	-gravity center -background transparent -fill "#f5c2e7" -size 128x64 -font Ubuntu caption:mekb \
-	-extent 352x96 \
-	\( turtle.png -flop -resize 84x84 -background transparent -gravity center \) \
+	-gravity center -background transparent \
+	-fill "#f5c2e7" -size 128x64 -font Ubuntu caption:mekb \
+	-extent "352x96<" \
+	"(" turtle.png -flop -resize 84x84 -background transparent -gravity center ")" \
 	-geometry -128-0 -composite \
-	\( turtle.png -resize 84x84 -background transparent -gravity center \) \
+	"(" turtle.png -resize 84x84 -background transparent -gravity center ")" \
 	-geometry +128-0 -composite \
-	\( +clone -fill "#1e1e2e" -colorize "100%" -blur 0x4 \( +clone -blur 0x4 \) -layers merge \) +swap -layers merge \
-	header.png
-magick \
-	-gravity center -background transparent -fill "#f5c2e7" -size 72x36 -font Ubuntu caption:"Skills:" \
-	\( +clone -fill "#1e1e2e" -colorize "100%" -blur 0x4 \( +clone -blur 0x4 \) -layers merge \) +swap -layers merge \
-	skills_text.png
+	"${SHADOW[@]}" \
+	header.png && \
+SKILLS=java,nodejs,bash,c
+curl -- "https://skillicons.dev/icons?theme=dark&i=$SKILLS" \
+	| sed 's/fill="#242938"/fill="#1e1e2e"/g;'\
+'s/fill="white"/fill="#cdd6f4"/g;'\
+'s/fill="#fff"/fill="#cdd6f4"/g;'\
+'s/fill="#F58219"/fill="#fab387"/g;'\
+'s/fill="#81CD39"/fill="#a6e3a1"/g;'\
+'s/fill="#47B353"/fill="#a6e3a1"/g;'\
+'s/fill="#394AAB"/fill="#89b4fa"/g;'\
+'s/fill="gray"/fill="#585b70"/g' \
+	| tac | sed "0,/#89b4fa/ s/#89b4fa/#1e1e2e/" | sed "0,/#cdd6f4/ s/#cdd6f4/#89b4fa/" | tac \
+	| inkscape -h 48 -p --export-filename - --export-type png \
+	| magick png:- \
+	-gravity center -background transparent \
+	-extent "%[fx:w+48]x%[fx:h+48]<" \
+	"${SHADOW[@]}" \
+	-background transparent \
+	-gravity south \
+	-extent "0x%[fx:h+16]<" \
+	-gravity north \
+	-size "%[fx:w]x36" \
+	-fill "#f5c2e7" -font Ubuntu caption:"Skills:" \
+	-gravity south \
+	-extent "0x%[fx:h+24]<" \
+	"${SHADOW[@]}" \
+	-layers merge \
+	skills.png
